@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mxpfilmz.netlify.app/sitemap.xml
