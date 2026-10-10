@@ -78,6 +78,29 @@
   const nav = $('#nav');
   onScroll((y) => nav?.classList.toggle('is-scrolled', y > 40));
 
+  /* ── In-page anchors: scroll under the fixed nav (Services / Book / etc.) ── */
+  const goHash = (id, smooth) => {
+    const el = document.getElementById(id);
+    if (!el) return false;
+    el.scrollIntoView({ behavior: smooth && !reduce ? 'smooth' : 'auto', block: 'start' });
+    return true;
+  };
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest?.('a[href^="#"]');
+    if (!a) return;
+    const href = a.getAttribute('href');
+    if (!href || href === '#' || href.startsWith('#main')) return;
+    const id = href.slice(1);
+    if (!document.getElementById(id)) return;
+    e.preventDefault();
+    goHash(id, true);
+    history.pushState(null, '', href);
+  });
+  if (location.hash.length > 1) {
+    const id = decodeURIComponent(location.hash.slice(1));
+    requestAnimationFrame(() => goHash(id, false));
+  }
+
   /* ── Headlines reveal line by line: words wrapped in masks, staggered per visual line ── */
   function splitLines(el) {
     if (el.classList.contains('split')) return;
